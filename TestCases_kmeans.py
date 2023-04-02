@@ -33,7 +33,7 @@ class TestCases(unittest.TestCase):
 
     def test_04_distance(self):
         for ix, input in enumerate(self.test_cases['shape']):
-            dist = distance(input, self.test_cases['init_centroid'][ix])
+            dist = km.distance(input, self.test_cases['init_centroid'][ix])
             np.testing.assert_array_almost_equal_nulp(dist, self.test_cases['distance'][ix])
 
     def test_05_get_labels(self):

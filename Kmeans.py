@@ -44,13 +44,7 @@ class KMeans:
            else:# sino, aplanamos a una matriz de dimensiones N x D (D = última dimensión --> columnas)
                X = X.reshape(-1, X.shape[-1])
                
-      
-      
         self.X = X # Guarda la matriz X en la variable de instancia self.X
-       
-            
-   
-      
        
 
     def _init_options(self, options=None):
@@ -185,6 +179,16 @@ def find_bestK(self, max_K):
 
 
 def distance(X, C):
+    
+    dist = np.zeros((X.shape[0], C.shape[0]))
+    
+    for i in range(X.shape[0]):
+        for j in range (C.shape[0]):
+            dist[i,j] = np.sqrt(np.sum(np.square(X[i, :] - C[j, :])))
+    
+    return dist
+     
+    
     """
     Calculates the distance between each pixel and each centroid
     Args:
@@ -200,7 +204,6 @@ def distance(X, C):
     ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
     ##  AND CHANGE FOR YOUR OWN CODE
     #########################################################
-    return np.random.rand(X.shape[0], C.shape[0])
 
 
 def get_colors(centroids):
