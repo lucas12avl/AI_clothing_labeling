@@ -15,12 +15,12 @@ class TestCases(unittest.TestCase):
         with open('./test/test_cases_kmeans.pkl', 'rb') as f:
             self.test_cases = pickle.load(f)
 
-    def test_01_NIU(self):
+    def test_01_NIU(self): #NO HACER CASO, SOLO COMPRUEBA QUE ESTEN LOS NIUS Y EL GRUPO
         # DON'T FORGET TO WRITE YOUR NIU AND GROUPS
-        self.assertNotEqual(km.__authors__, "TO_BE_FILLED", msg="CHANGE IT TO YOUR NIU!")
-        self.assertNotEqual(km.__group__, "TO_BE_FILLED", msg="CHANGE YOUR GROUP NAME!")
+        self.assertNotEqual(km.__authors__, "1636290, 1631153, 1636589", msg="CHANGE IT TO YOUR NIU!")
+        self.assertNotEqual(km.__group__, "DJ.10", msg="CHANGE YOUR GROUP NAME!")
 
-    def test_02_init_X(self):
+    def test_02_init_X(self): #HECHA 
         for ix, input in enumerate(self.test_cases['input']):
             km = KMeans(input, self.test_cases['K'][ix])
             np.testing.assert_array_equal(km.X, self.test_cases['shape'][ix])
