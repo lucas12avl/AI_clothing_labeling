@@ -1,13 +1,13 @@
-__authors__ = 'TO_BE_FILLED'
-__group__ = 'TO_BE_FILLED'
+__authors__ = '1636290, 1631153, 1636589'
+__group__ = 'DJ.10'
 
-import numpy as np
+import numpy as np #para usar numpy hay que poner np.<lo que queramos usar de la libreria>
 import utils
 
 
 class KMeans:
 
-    def __init__(self, X, K=1, options=None):
+    def __init__(self, X, K=1, options=None): #de momento k=1 mas adelante  
         """
          Constructor of KMeans class
              Args:
@@ -18,23 +18,40 @@ class KMeans:
         self.K = K
         self._init_X(X)
         self._init_options(options)  # DICT options
+        self._init_centroids()
 
     #############################################################
     ##  THIS FUNCTION CAN BE MODIFIED FROM THIS POINT, if needed
     #############################################################
 
-    def _init_X(self, X):
+    def _init_X(self, X): # esta bien hecho pero da error por el init_centroids
         """Initialization of all pixels, sets X as an array of data in vector form (PxD)
             Args:
                 X (list or np.array): list(matrix) of all pixel values
                     if matrix has more than 2 dimensions, the dimensionality of the sample space is the length of
                     the last dimension
         """
-        #######################################################
-        ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
-        ##  AND CHANGE FOR YOUR OWN CODE
-        #######################################################
-        self.X = np.random.rand(100, 5)
+        # te pasan una matriz,comruebas qye s una lista. si la matriz es 3d, la pasas a 2d
+       
+        X = X.astype(float) #Convierte los valores a tipo float
+
+          # Si la matriz X tiene solo 1 o 2 dimensiones, no es necesario hacer nada
+        if len(X.shape) > 2: # Si la matriz X tiene más de 2 dimensiones
+                  
+           if X.shape[-1] == 3: # Si la matriz X es una imagen de dimensiones F x C x 3, se aplanará a una matriz de dimensiones N x 3.
+               X = X.reshape(-1, 3)
+           
+           else:# sino, aplanamos a una matriz de dimensiones N x D (D = última dimensión --> columnas)
+               X = X.reshape(-1, X.shape[-1])
+               
+      
+      
+        self.X = X # Guarda la matriz X en la variable de instancia self.X
+       
+            
+   
+      
+       
 
     def _init_options(self, options=None):
         """
@@ -63,21 +80,40 @@ class KMeans:
         #############################################################
 
 
-def _init_centroids(self):
-    """
-    Initialization of centroids
-    """
+    def _init_centroids(self):
+       
+     """Initialization of centroids """
 
-    #######################################################
-    ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
-    ##  AND CHANGE FOR YOUR OWN CODE
-    #######################################################
-    if self.options['km_init'].lower() == 'first':
-        self.centroids = np.random.rand(self.K, self.X.shape[1])
-        self.old_centroids = np.random.rand(self.K, self.X.shape[1])
-    else:
-        self.centroids = np.random.rand(self.K, self.X.shape[1])
-        self.old_centroids = np.random.rand(self.K, self.X.shape[1])
+    
+     # Inicializar centroides y centroides antiguos
+     self.centroids = np.zeros((self.K, self.X.shape[1]))  # se crea una matriz de K filas y número de columnas igual al número de características de los datos de entrada
+     self.old_centroids = np.zeros((self.K, self.X.shape[1]))  # se crea una matriz de K filas y número de columnas igual al número de características de los datos de entrada para almacenar los centroides antiguos
+
+     # Asignar valores a los centroides en función de la opción de inicialización
+     if self.options['km_init'].lower() == 'first':  # si la opción de inicialización es 'first'
+        # Opción 'first': asignar los primeros K puntos de la imagen a los centroides
+        unique_points = set()  # se crea un conjunto vacío para almacenar los puntos únicos
+        for i in range(self.K):  # para cada uno de los K centroides
+            # Encontrar el primer punto único y asignarlo al i-ésimo centroide
+            j = 0  # se inicializa un índice para recorrer los puntos de entrada
+            while tuple(self.X[j]) in unique_points:  # mientras el punto ya haya sido asignado a otro centroide
+                j += 1  # se pasa al siguiente punto
+            self.centroids[i] = self.X[j]  # se asigna el primer punto único encontrado al i-ésimo centroide
+            unique_points.add(tuple(self.X[j]))  # se agrega el punto encontrado al conjunto de puntos únicos
+
+     elif self.options['km_init'].lower() == 'random':  # si la opción de inicialización es 'random'
+        # Opción 'random': elegir K puntos aleatorios de la imagen como centroides
+        self.centroids = self.X[np.random.choice(self.X.shape[0], self.K, replace=False)]  # se seleccionan K puntos aleatorios sin reemplazo de los datos de entrada para asignarlos como centroides
+
+     elif self.options['km_init'].lower() == 'custom':  # si la opción de inicialización es 'custom'
+        # Opción 'custom': utilizar una estrategia de inicialización definida por el usuario
+        # En este caso, inicializamos los centroides distribuyendo uniformemente los puntos a lo largo de cada dimensión de característica
+        for i in range(self.K):  # para cada uno de los K centroides
+            self.centroids[i, :] = np.linspace(np.min(self.X[:, i]), np.max(self.X[:, i]), self.K)  # se distribuyen uniformemente los puntos a lo largo de cada dimensión de característica para asignarlos como centroides
+
+     # Inicializar centroides antiguos con los mismos valores que los centroides
+     self.old_centroids = self.centroids.copy()  # se copian los centroides asignados como nuevos en la variable de los centroides antiguos
+
 
 
 def get_labels(self):
