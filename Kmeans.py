@@ -110,15 +110,22 @@ class KMeans:
 
 
 
-def get_labels(self):
-    """        Calculates the closest centroid of all points in X
-    and assigns each point to the closest centroid
-    """
-    #######################################################
-    ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
-    ##  AND CHANGE FOR YOUR OWN CODE
-    #######################################################
-    self.labels = np.random.randint(self.K, size=self.X.shape[0])
+    def get_labels(self): 
+        """       
+        Calculates the closest centroid of all points in X
+        and assigns each point to the closest centroid
+        """
+        #######################################################
+        ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
+        ##  AND CHANGE FOR YOUR OWN CODE
+        #######################################################
+        # self.labels = np.random.randint(self.K, size=self.X.shape[0])
+        dist = distance(self.X, self.centroids) #claculamos las distancias a los clusters
+        self.labels = np.argmin(dist, axis=1)  # pedimos que de cada fila (axis=1) de la matriz dist, nos guarde la columna donde se encuentra el valor mas pequeño
+        # axis = 1 --> de cada fila 
+        
+        
+        
 
 
 def get_centroids(self):
@@ -194,7 +201,6 @@ def distance(X, C):
     Args:
         X (numpy array): PxD 1st set of data points (usually data points)
         C (numpy array): KxD 2nd set of data points (usually cluster centroids points)
-
     Returns:
         dist: PxK numpy array position ij is the distance between the
         i-th point of the first set an the j-th point of the second set
@@ -211,7 +217,6 @@ def get_colors(centroids):
     for each row of the numpy matrix 'centroids' returns the color label following the 11 basic colors as a LIST
     Args:
         centroids (numpy array): KxD 1st set of data points (usually centroid points)
-
     Returns:
         labels: list of K labels corresponding to one of the 11 basic colors
     """
