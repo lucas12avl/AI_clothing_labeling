@@ -20,6 +20,7 @@ class KMeans:
         self._init_options(options)  # DICT options
         self._init_centroids()
 
+
     #############################################################
     ##  THIS FUNCTION CAN BE MODIFIED FROM THIS POINT, if needed
     #############################################################
@@ -128,38 +129,51 @@ class KMeans:
         
 
 
-def get_centroids(self):
-    """
-    Calculates coordinates of centroids based on the coordinates of all the points assigned to the centroid
-    """
-    #######################################################
-    ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
-    ##  AND CHANGE FOR YOUR OWN CODE
-    #######################################################
-    pass
+    def get_centroids(self):
+        """
+        Calculates coordinates of centroids based on the coordinates of all the points assigned to the centroid
+        """
+        #######################################################
+        ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
+        ##  AND CHANGE FOR YOUR OWN CODE
+        #######################################################
+        self.old_centroids = self.centroids.copy()
+        for i in range(self.K):
+            centre = self.X[self.labels == i]
+            if len(centre) > 0:
+                self.centroids[i] = np.mean(centre, axis=0)
+
+    def converges(self):
+        """
+        Checks if there is a difference between current and old centroids
+        """
+        #######################################################
+        ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
+        ##  AND CHANGE FOR YOUR OWN CODE
+        #######################################################
+        for k in range(self.K):
+            if not np.array_equal(self.centroids[k], self.old_centroids[k]):
+                return False
+
+        return True
 
 
-def converges(self):
-    """
-    Checks if there is a difference between current and old centroids
-    """
-    #######################################################
-    ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
-    ##  AND CHANGE FOR YOUR OWN CODE
-    #######################################################
-    return True
+    def fit(self):
+        """
+        Runs K-Means algorithm until it converges or until the number
+        of iterations is smaller than the maximum number of iterations.
+        """
+        #######################################################
+        ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
+        ##  AND CHANGE FOR YOUR OWN CODE
+        #######################################################
+        converged = False
+        while not converged:
+            self.get_labels()
+            self.get_centroids()
+            self.num_iter += 1
+            converged = self.converges()
 
-
-def fit(self):
-    """
-    Runs K-Means algorithm until it converges or until the number
-    of iterations is smaller than the maximum number of iterations.
-    """
-    #######################################################
-    ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
-    ##  AND CHANGE FOR YOUR OWN CODE
-    #######################################################
-    pass
 
 
 def withinClassDistance(self):
@@ -186,16 +200,16 @@ def find_bestK(self, max_K):
 
 
 def distance(X, C):
-    
+
     dist = np.zeros((X.shape[0], C.shape[0]))
-    
+
     for i in range(X.shape[0]):
         for j in range (C.shape[0]):
             dist[i,j] = np.sqrt(np.sum(np.square(X[i, :] - C[j, :])))
-    
+
     return dist
-     
-    
+
+
     """
     Calculates the distance between each pixel and each centroid
     Args:
