@@ -124,9 +124,6 @@ class KMeans:
         dist = distance(self.X, self.centroids) #claculamos las distancias a los clusters
         self.labels = np.argmin(dist, axis=1)  # pedimos que de cada fila (axis=1) de la matriz dist, nos guarde la columna donde se encuentra el valor mas pequeño
         # axis = 1 --> de cada fila 
-        
-        
-        
 
 
     def get_centroids(self):
@@ -168,7 +165,7 @@ class KMeans:
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
         converged = False
-        while not converged:
+        while not converged and (self.num_iter < self.options['max_iter']):
             self.get_labels()
             self.get_centroids()
             self.num_iter += 1
@@ -176,27 +173,38 @@ class KMeans:
 
 
 
-def withinClassDistance(self):
-    """
-     returns the within class distance of the current clustering
-    """
+    def withinClassDistance(self):
+        #Puede fallar
+        WCD = 0.0
+        
+        for k in range(self.K):
+            Cx = self.centroids[k]
+            x = self.X[self.labels == k]
+            distancia = distance(x, Cx.reshape(1,-1))
+            WCD = WCD + np.sum(distancia)
+        
+        return WCD
 
-    #######################################################
-    ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
-    ##  AND CHANGE FOR YOUR OWN CODE
-    #######################################################
-    return np.random.rand()
+        """           
+        returns the within class distance of the current clustering
+        """
+
+        #######################################################
+        ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
+        ##  AND CHANGE FOR YOUR OWN CODE
+        #######################################################
+        return np.random.rand()
 
 
-def find_bestK(self, max_K):
-    """
-     sets the best k anlysing the results up to 'max_K' clusters
-    """
-    #######################################################
-    ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
-    ##  AND CHANGE FOR YOUR OWN CODE
-    #######################################################
-    pass
+    def find_bestK(self, max_K):
+        """
+        sets the best k anlysing the results up to 'max_K' clusters
+        """
+        #######################################################
+        ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
+        ##  AND CHANGE FOR YOUR OWN CODE
+        #######################################################
+        pass
 
 
 def distance(X, C):
