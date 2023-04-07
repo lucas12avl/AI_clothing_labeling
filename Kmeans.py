@@ -172,18 +172,18 @@ class KMeans:
             converged = self.converges()
 
 
-
     def withinClassDistance(self):
         #Puede fallar
         WCD = 0.0
+        N = self.X.shape[0]
         
         for k in range(self.K):
-            Cx = self.centroids[k]
             x = self.X[self.labels == k]
+            Cx = self.centroids[k]
             distancia = distance(x, Cx.reshape(1,-1))
-            WCD = WCD + np.sum(distancia)
+            WCD = WCD + np.sum(np.square(distancia))
         
-        return WCD
+        return (WCD / N)
 
         """           
         returns the within class distance of the current clustering
@@ -193,10 +193,34 @@ class KMeans:
         ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
-        return np.random.rand()
 
 
     def find_bestK(self, max_K):
+        ant_WCD = 0
+        bestK = None
+        llindar = 20
+        
+        for k in range(2, max_K):
+            self.K = k
+            self.fit()
+            WCD = self.withinClassDistance()
+            
+            if ant_WCD != 0:
+                dec = 100 * (WCD / ant_WCD)
+                if (100 - dec) < llindar:
+                    bestK = k
+                    break  
+              
+            ant_WCD = WCD
+
+        if bestK is None:
+            self.K = max_K
+        else:
+            self.K = bestK
+        
+        return bestK
+        
+        
         """
         sets the best k anlysing the results up to 'max_K' clusters
         """
