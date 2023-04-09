@@ -149,7 +149,7 @@ class KMeans:
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
         for k in range(self.K):
-            if not np.array_equal(self.centroids[k], self.old_centroids[k]):
+            if not np.array_equal(self.centroids[k], self.old_centroids[k]): 
                 return False
 
         return True
@@ -181,7 +181,7 @@ class KMeans:
             x = self.X[self.labels == k]
             Cx = self.centroids[k]
             distancia = distance(x, Cx.reshape(1,-1))
-            WCD = WCD + np.sum(np.square(distancia))
+            WCD += np.sum(np.square(distancia))
         
         return (WCD / N)
 
@@ -203,22 +203,22 @@ class KMeans:
         for k in range(2, max_K):
             self.K = k
             self.fit()
-            WCD = self.withinClassDistance()
+            wcd = self.withinClassDistance()
             
             if ant_WCD != 0:
-                dec = 100 * (WCD / ant_WCD)
+                dec = 100 * (wcd / ant_WCD)
                 if (100 - dec) < llindar:
                     bestK = k
-                    break  
+                    break
               
-            ant_WCD = WCD
+            ant_WCD = wcd
 
         if bestK is None:
             self.K = max_K
         else:
             self.K = bestK
         
-        return bestK
+        return self.K
         
         
         """
@@ -232,16 +232,12 @@ class KMeans:
 
 
 def distance(X, C):
-
-    dist = np.zeros((X.shape[0], C.shape[0]))
-
-    for i in range(X.shape[0]):
-        for j in range (C.shape[0]):
-            dist[i,j] = np.sqrt(np.sum(np.square(X[i, :] - C[j, :])))
-
+    
+    dist = np.sqrt(np.sum(np.square(X[:, np.newaxis] - C), axis=2))
     return dist
 
-
+    #https://www.w3docs.com/snippets/python/python-numpy-valueerror-operands-could-not-be-broadcast-together-with-shapes.html
+    
     """
     Calculates the distance between each pixel and each centroid
     Args:
