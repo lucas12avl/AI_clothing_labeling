@@ -138,7 +138,7 @@ class KMeans:
         for i in range(self.K):
             centre = self.X[self.labels == i]
             if len(centre) > 0:
-                self.centroids[i] = np.mean(centre, axis=0)
+                self.centroids[i] = np.sum(centre, axis=0) / len(centre)
 
     def converges(self):
         """
@@ -149,8 +149,8 @@ class KMeans:
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
         for k in range(self.K):
-            if not np.array_equal(self.centroids[k], self.old_centroids[k]): 
-                return False
+            if not np.array_equal(self.centroids[k], self.old_centroids[k]): #compara si son diferentes los arrays
+                return False #es diferente
 
         return True
 
@@ -164,12 +164,12 @@ class KMeans:
         ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
-        converged = False
-        while not converged and (self.num_iter < self.options['max_iter']):
+        condicio = False
+        while not condicio and (self.num_iter < self.options['max_iter']):
             self.get_labels()
             self.get_centroids()
             self.num_iter += 1
-            converged = self.converges()
+            condicio = self.converges()
 
 
     def withinClassDistance(self):
@@ -181,7 +181,7 @@ class KMeans:
             x = self.X[self.labels == k]
             Cx = self.centroids[k]
             distancia = distance(x, Cx.reshape(1,-1))
-            WCD += np.sum(np.square(distancia))
+            WCD = WCD + np.sum(np.square(distancia))
         
         return (WCD / N)
 
@@ -203,22 +203,22 @@ class KMeans:
         for k in range(2, max_K):
             self.K = k
             self.fit()
-            wcd = self.withinClassDistance()
+            WCD = self.withinClassDistance()
             
             if ant_WCD != 0:
-                dec = 100 * (wcd / ant_WCD)
+                dec = 100 * (WCD / ant_WCD)
                 if (100 - dec) < llindar:
                     bestK = k
-                    break
+                    break  
               
-            ant_WCD = wcd
+            ant_WCD = WCD
 
         if bestK is None:
             self.K = max_K
         else:
             self.K = bestK
         
-        return self.K
+        return bestK
         
         
         """
@@ -228,16 +228,15 @@ class KMeans:
         ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
-        pass
+
 
 
 def distance(X, C):
-    
     dist = np.sqrt(np.sum(np.square(X[:, np.newaxis] - C), axis=2))
     return dist
 
-    #https://www.w3docs.com/snippets/python/python-numpy-valueerror-operands-could-not-be-broadcast-together-with-shapes.html
-    
+    # https://www.w3docs.com/snippets/python/python-numpy-valueerror-operands-could-not-be-broadcast-together-with-shapes.html
+
     """
     Calculates the distance between each pixel and each centroid
     Args:
@@ -263,8 +262,13 @@ def get_colors(centroids):
         labels: list of K labels corresponding to one of the 11 basic colors
     """
 
+    labels = [] #crea la lista
+    for i in np.argmax(utils.get_color_prob(centroids), axis=1): #por cada fila se guarda la columna con el valor mas grande
+        labels.append(utils.colors[i]) #se añade un color a la lista
+    return labels
+
     #########################################################
     ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
     ##  AND CHANGE FOR YOUR OWN CODE
     #########################################################
-    return list(utils.colors)
+
