@@ -165,6 +165,7 @@ class KMeans:
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
         condicio = False
+        self._init_centroids()
         while not condicio and (self.num_iter < self.options['max_iter']):
             self.get_labels()
             self.get_centroids()
@@ -199,25 +200,25 @@ class KMeans:
         ant_WCD = 0
         bestK = None
         llindar = 20
-        
+
         for k in range(2, max_K):
             self.K = k
             self.fit()
             WCD = self.withinClassDistance()
-            
+
             if ant_WCD != 0:
                 dec = 100 * (WCD / ant_WCD)
                 if (100 - dec) < llindar:
                     bestK = k
-                    break  
-              
+                    break
+
             ant_WCD = WCD
 
         if bestK is None:
             self.K = max_K
         else:
-            self.K = bestK
-        
+            self.K = bestK-1
+
         return bestK
         
         
