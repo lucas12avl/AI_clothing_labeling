@@ -1,5 +1,5 @@
-__authors__ = 'TO_BE_FILLED'
-__group__ = 'TO_BE_FILLED'
+__authors__ = ['1636290, 1631153, 1636589']
+__group__ = ['DJ.10']
 
 import numpy as np
 import math
@@ -16,6 +16,15 @@ class KNN:
         #############################################################
 
     def _init_train(self, train_data):
+        train_data = train_data.astype(float) #convertimos a float por si acaso
+        
+        # Reshape  PxMxN -> Px(D=M*N)
+        P, M, N = train_data.shape
+        D = M*N
+        train_data = train_data.reshape((P, D))
+        
+        # Assign train_data to self.train_data
+        self.train_data = train_data
         """
         initializes the train data
         :param train_data: PxMxNx3 matrix corresponding to P color images
@@ -25,9 +34,23 @@ class KNN:
         ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
-        self.train_data = np.random.randint(8, size=[10, 14400])
 
     def get_k_neighbours(self, test_data, k):
+        
+        P, M, N = test_data.shape
+        D = M*N
+        test_data = test_data.reshape(P,D)
+        
+        dist = cdist(test_data, self.train_data, 'euclidean')
+        
+        proxima = dist.argsort(axis = 1)[:, :k]
+        
+        label = []
+        for i in proxima:
+            label.append(self.labels[i]) 
+        
+        self.neighbors = np.array(label)
+
         """
         given a test_data matrix calculates de k nearest neighbours at each point (row) of test_data on self.neighbors
         :param test_data: array that has to be shaped to a NxD matrix (N points in a D dimensional space)
@@ -39,7 +62,6 @@ class KNN:
         ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
-        self.neighbors = np.random.randint(k, size=[test_data.shape[0], k])
 
     def get_class(self):
         """

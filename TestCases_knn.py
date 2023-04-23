@@ -15,8 +15,8 @@ class TestCases(unittest.TestCase):
 
     def test_NIU(self):
         # DON'T FORGET TO WRITE YOUR NIU AND GROUPS
-        self.assertNotEqual(k.__authors__, "TO_BE_FILLED", msg="CHANGE IT TO YOUR NIU!")
-        self.assertNotEqual(k.__group__, "TO_BE_FILLED", msg="CHANGE YOUR GROUP NAME!")
+        self.assertNotEqual(k.__authors__, "1636290, 1631153, 1636589", msg="CHANGE IT TO YOUR NIU!")
+        self.assertNotEqual(k.__group__, "DJ.10", msg="CHANGE YOUR GROUP NAME!")
 
     def test_init_train(self):
         for ix, (train_imgs, train_labels) in enumerate(self.test_cases['input']):
