@@ -75,20 +75,20 @@ class KNN:
         ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
         ##  AND CHANGE FOR YOUR OWN CODE
         #######################################################
-        taulanoms = ['Handbags', 'Dresses', 'Jeans', 'Heels', 'Shorts']
         #creates the two arrays
         resultat = []
         percents = []
         for i in self.neighbors:
             #looks which one is the most voted and its percentage
-            votacions = np.array([np.count_nonzero(i == c) for c in taulanoms])
+            #fills the array of class most voted
+            votacions = np.array([np.count_nonzero(i == c) for c in i])
             major = np.argmax(votacions)
+            resultat.append(i[major])
+            #fills the array of percentages
             percmajor = votacions[major] / len(i)
-            resultat.append(major)
             percents.append(percmajor)
-        #changes the array resultat to one with the same data but the data type <U8 based on taulanoms
-        classes = np.array([taulanoms[j] for j in resultat], dtype='<U8')
-        return classes
+        #turns list resultat into an array
+        return np.array(resultat)
 
     def predict(self, test_data, k):
         """
