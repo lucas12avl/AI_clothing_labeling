@@ -3,9 +3,8 @@ __group__ = ['DJ.10']
 
 from utils_data import read_dataset, read_extended_dataset, crop_images, visualize_retrieval
 import numpy as np #para usar numpy hay que poner np.<lo que queramos usar de la libreria>
-import Kmeans
-import math
-import time
+import Kmeans as km
+import time as t
 
 #Funcions  d'analisi qualitatiu
 def Retrieval_by_color(imagenes, etiquetes, pregunta):
@@ -35,6 +34,8 @@ def Retrieval_combined(imagenes, etiqueta_forma, etiqueta_color, pregunta_forma,
                 imag.append(i)
             
     return np.array(imag)
+
+
 
     
 #test per a les Funcions  d'analisi qualitatiu
@@ -70,6 +71,48 @@ def test_Retrieval_combined():
     
     combined = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Dresses", "White")
     visualize_retrieval(combined, 5, title="Vestidos blancos")
+
+# test QUANTITAU
+def Kmean_statistics(kmeans, imatges, kmax):
+    i = []
+    WCD_r = []
+    temps = []
+    for k in range(2, kmax+1):
+        kmeans.k = k
+        start = t.time()
+        kmeans.fit()
+        end = t.time()
+        WCD = kmeans.withinClassDistance()
+        
+        i.append(k)
+        temps.append((end - start))
+        WCD_r.append(WCD)
+    
+    return WCD_r, i, temps
+
+
+
+
+def get_shape_accuracy(etiquetes, gt):
+    total = len(etiquetes)
+    et_corr = sum(etiquetes == gt) #con for va un poco más lento
+    percentatge = (et_corr / total)*100
+    
+    return percentatge
+
+
+def get_color_accuracy(etiquetes, gt):
+    total = len(etiquetes)
+
+    correctes = 0
+    
+    for i in range(total):
+        for j in range()
+        
+    
+    
+    return 1
+
 
 
 
