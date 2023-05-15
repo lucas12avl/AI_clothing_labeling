@@ -30,8 +30,9 @@ def Retrieval_combined(imagenes, etiqueta_forma, etiqueta_color, pregunta_forma,
     imag = []
     
     for i, forma, color in zip(imagenes, etiqueta_forma, etiqueta_color):
-        if pregunta_forma in forma and pregunta_color == color:
-            imag.append(i)
+        if pregunta_forma in forma:
+            if pregunta_color in color: #falla si se pone en ==
+                imag.append(i)
             
     return np.array(imag)
 
@@ -40,44 +41,35 @@ def Retrieval_combined(imagenes, etiqueta_forma, etiqueta_color, pregunta_forma,
 def test_Retrieval_by_color():
 
     #Llamamos a Retrieval_by_color:
-    results_red = Retrieval_by_color(test_imgs, test_color_labels, "Red")
-    results_green = Retrieval_by_color(test_imgs, test_color_labels, "Green")
-    results_blue = Retrieval_by_color(test_imgs, test_color_labels, "Blue")
+    rojo = Retrieval_by_color(test_imgs, test_color_labels, "Red")
+    verde = Retrieval_by_color(test_imgs, test_color_labels, "Green")
+    azul = Retrieval_by_color(test_imgs, test_color_labels, "Blue")
 
     #Visualizamos las imagenes que se han recogido
-    visualize_retrieval(results_red, 5, title="Ropa de color rojo")
-    visualize_retrieval(results_green, 5, title="Ropa de color verde")
-    visualize_retrieval(results_blue, 5, title="Ropa de color azul")
+    visualize_retrieval(rojo, 5, title="Ropa de color rojo")
+    visualize_retrieval(verde, 5, title="Ropa de color verde")
+    visualize_retrieval(azul, 5, title="Ropa de color azul")
 
 
 def test_Retrieval_by_shape():
 
     #Llamamos a Retrieval_by_shape:
-    results = Retrieval_by_shape(test_imgs, test_class_labels, "Heels")
-    visualize_retrieval(results, 5, title="Forma: Heels")
+    shape = Retrieval_by_shape(test_imgs, test_class_labels, "Heels")
+    visualize_retrieval(shape, 5, title="Forma: Heels")
 
-    results = Retrieval_by_shape(test_imgs, test_class_labels, "Dresses")
-    visualize_retrieval(results, 5, title="Forma: Dresses")
+    shape = Retrieval_by_shape(test_imgs, test_class_labels, "Dresses")
+    visualize_retrieval(shape, 5, title="Forma: Dresses")
     
 def test_Retrieval_combined():
 
-    results = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Shirts", "Blue")
-    print(results)
-    visualize_retrieval(results, 5, title="Retrieval T-Shirt and Blue clothes")
+    combined = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Shirts", "Blue")
+    visualize_retrieval(combined, 5, title="Camisetas azules")
 
-    results = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Sandals", "Red")
-    print(results)
-    visualize_retrieval(results, 5, title="Retrieval Skirt and Red clothes")
+    combined = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Sandals", "Red")
+    visualize_retrieval(combined, 5, title="Sandalias rojas")
     
-    results = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Dresses", "White")
-    print(results)
-    visualize_retrieval(results, 5, title="Retrieval Sneaker and White clothes")
-
-
-
-
-
-
+    combined = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Dresses", "White")
+    visualize_retrieval(combined, 5, title="Vestidos blancos")
 
 
 
@@ -96,7 +88,8 @@ if __name__ == '__main__':
     imgs, class_labels, color_labels, upper, lower, background = read_extended_dataset()
     cropped_images = crop_images(imgs, upper, lower)
     
-    #test_Retrieval_by_color() #Problema: No pasa el test en menos de 3s
-    #test_Retrieval_by_shape() #Problema: No pasa el test en menos de 3s
-    # You can start coding your functions here
-    #test_Retrieval_combined()
+    #test per a les Funcions  d'analisi qualitatiu
+    test_Retrieval_by_color()
+    test_Retrieval_by_shape()
+    test_Retrieval_combined()
+    #Posible problema, que tarda casi 3s en pasar.
