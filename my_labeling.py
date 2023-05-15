@@ -72,13 +72,24 @@ def test_Retrieval_combined():
     combined = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Dresses", "White")
     visualize_retrieval(combined, 5, title="Vestidos blancos")
 
-# test QUANTITAU
-def Kmean_statistics(kmeans, imatges, kmax):
+#                   #
+#   TEST QUANTITAU  #
+#                   #
+
+def test_Kmean_statistics():
+  ka = km.KMeans(train_imgs)
+  WCD_r, i, temps = Kmean_statistics(ka, 3)
+  print("\n WithinClassDistance:", WCD_r, "\n clusters:",i, "\n time:",temps)   
+    
+#def test_get_shape_accuracy():
+    
+   
+def Kmean_statistics(kmeans, kmax):
     i = []
     WCD_r = []
     temps = []
     for k in range(2, kmax+1):
-        kmeans.k = k
+        kmeans.K = k #si se cambia a 'k' minuscula el tiempo baja MUCHO
         start = t.time()
         kmeans.fit()
         end = t.time()
@@ -87,8 +98,13 @@ def Kmean_statistics(kmeans, imatges, kmax):
         i.append(k)
         temps.append((end - start))
         WCD_r.append(WCD)
-    
+        print("hecho")
+        
+     
+   
     return WCD_r, i, temps
+
+
 
 
 
@@ -99,19 +115,6 @@ def get_shape_accuracy(etiquetes, gt):
     percentatge = (et_corr / total)*100
     
     return percentatge
-
-
-def get_color_accuracy(etiquetes, gt):
-    total = len(etiquetes)
-
-    correctes = 0
-    
-    for i in range(total):
-        for j in range()
-        
-    
-    
-    return 1
 
 
 
@@ -136,3 +139,5 @@ if __name__ == '__main__':
     test_Retrieval_by_shape()
     test_Retrieval_combined()
     #Posible problema, que tarda casi 3s en pasar.
+    test_Kmean_statistics()
+    print("FIN")
