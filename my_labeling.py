@@ -4,6 +4,7 @@ __group__ = ['DJ.10']
 from utils_data import read_dataset, read_extended_dataset, crop_images, visualize_retrieval
 import numpy as np #para usar numpy hay que poner np.<lo que queramos usar de la libreria>
 import Kmeans as km
+import KNN as knn
 import time as t
 
 #Funcions  d'analisi qualitatiu
@@ -30,21 +31,31 @@ def Retrieval_combined(imagenes, etiqueta_forma, etiqueta_color, pregunta_forma,
     
     for i, forma, color in zip(imagenes, etiqueta_forma, etiqueta_color):
         if pregunta_forma in forma:
-            if pregunta_color in color: #falla si se pone en ==
+            if pregunta_color == color: #falla si se pone en ==
                 imag.append(i)
             
     return np.array(imag)
 
+def my_colors():
+    etiquetes = []
+    
+    for test in test_imgs:
+        Km = km.KMeans(test, K = 2) #dependiendo de la K dará unos resultados u otros, pero funciona
+        Km.fit()
+        etiquetes.append(km.get_colors(Km.centroids))
+        
+    return np.array(etiquetes)
+        
 
 
     
 #test per a les Funcions  d'analisi qualitatiu
 def test_Retrieval_by_color():
-
+        
     #Llamamos a Retrieval_by_color:
-    rojo = Retrieval_by_color(test_imgs, test_color_labels, "Red")
-    verde = Retrieval_by_color(test_imgs, test_color_labels, "Green")
-    azul = Retrieval_by_color(test_imgs, test_color_labels, "Blue")
+    rojo = Retrieval_by_color(test_imgs, my_test_color_labels, "Red")
+    verde = Retrieval_by_color(test_imgs, my_test_color_labels, "Green")
+    azul = Retrieval_by_color(test_imgs, my_test_color_labels, "Blue")
 
     #Visualizamos las imagenes que se han recogido
     visualize_retrieval(rojo, 5, title="Ropa de color rojo")
@@ -83,11 +94,11 @@ def test_Kmean_statistics():
     
 #def test_get_shape_accuracy():
     
-   
 def Kmean_statistics(kmeans, kmax):
     i = []
     WCD_r = []
     temps = []
+    
     for k in range(2, kmax+1):
         kmeans.K = k #si se cambia a 'k' minuscula el tiempo baja MUCHO
         start = t.time()
@@ -99,14 +110,8 @@ def Kmean_statistics(kmeans, kmax):
         temps.append((end - start))
         WCD_r.append(WCD)
         print("hecho")
-        
-     
-   
+    
     return WCD_r, i, temps
-
-
-
-
 
 
 def get_shape_accuracy(etiquetes, gt):
@@ -115,6 +120,9 @@ def get_shape_accuracy(etiquetes, gt):
     percentatge = (et_corr / total)*100
     
     return percentatge
+
+
+
 
 
 
@@ -134,10 +142,10 @@ if __name__ == '__main__':
     imgs, class_labels, color_labels, upper, lower, background = read_extended_dataset()
     cropped_images = crop_images(imgs, upper, lower)
     
+    my_test_color_labels = my_colors()
     #test per a les Funcions  d'analisi qualitatiu
-    test_Retrieval_by_color()
-    test_Retrieval_by_shape()
-    test_Retrieval_combined()
+    #test_Retrieval_by_color()
+    #test_Retrieval_by_shape()
+    #test_Retrieval_combined()
     #Posible problema, que tarda casi 3s en pasar.
     test_Kmean_statistics()
-    print("FIN")
