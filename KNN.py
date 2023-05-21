@@ -19,8 +19,13 @@ class KNN:
         train_data = train_data.astype(float) #convertimos a float por si acaso
         
         # Reshape  PxMxN -> Px(D=M*N)
-        P, M, N = train_data.shape
-        D = M*N
+        if (len(train_data.shape) == 3):
+            P, M, N = train_data.shape
+            D = M*N
+        else:
+            P, M, N, num = train_data.shape
+            D = M*N*num
+        
         train_data = train_data.reshape((P, D))
         
         # Assign train_data to self.train_data
@@ -37,8 +42,13 @@ class KNN:
 
     def get_k_neighbours(self, test_data, k):
         
-        P, M, N = test_data.shape
-        D = M*N
+        if (len(test_data.shape) == 3):
+            P, M, N = test_data.shape
+            D = M*N
+        else:
+            P, M, N, num = test_data.shape
+            D = M*N*num
+        
         test_data = test_data.reshape(P,D)
         
         dist = cdist(test_data, self.train_data, 'euclidean')
@@ -89,6 +99,19 @@ class KNN:
             percents.append(percmajor)
         #turns list resultat into an array
         return np.array(resultat)
+        
+        """
+        Get the class by maximum voting
+        :return: 2 numpy array of Nx1 elements.
+                1st array For each of the rows in self.neighbors gets the most voted value
+                            (i.e. the class at which that row belongs)
+                2nd array For each of the rows in self.neighbors gets the % of votes for the winning class
+        """
+        #######################################################
+        ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
+        ##  AND CHANGE FOR YOUR OWN CODE
+        #######################################################
+        
 
     def predict(self, test_data, k):
         """

@@ -16,7 +16,8 @@ def Retrieval_by_color(imagenes, etiquetes, pregunta):
             imag.append(i)
             
     return np.array(imag)
-    
+
+
 def Retrieval_by_shape(imagenes, etiqueta, pregunta):
     imag = []
     
@@ -31,7 +32,7 @@ def Retrieval_combined(imagenes, etiqueta_forma, etiqueta_color, pregunta_forma,
     
     for i, forma, color in zip(imagenes, etiqueta_forma, etiqueta_color):
         if pregunta_forma in forma:
-            if pregunta_color == color: #falla si se pone en ==
+            if pregunta_color in color: #falla si se pone en ==
                 imag.append(i)
             
     return np.array(imag)
@@ -43,8 +44,11 @@ def my_colors():
         Km = km.KMeans(test, K = 2) #dependiendo de la K dará unos resultados u otros, pero funciona
         Km.fit()
         etiquetes.append(km.get_colors(Km.centroids))
-        
-    return np.array(etiquetes)
+    
+    Knn = knn.KNN(train_imgs, train_class_labels) 
+    class_label = Knn.predict(test_imgs, 3)
+    
+    return np.array(etiquetes), class_label
         
 
 
@@ -66,21 +70,21 @@ def test_Retrieval_by_color():
 def test_Retrieval_by_shape():
 
     #Llamamos a Retrieval_by_shape:
-    shape = Retrieval_by_shape(test_imgs, test_class_labels, "Heels")
+    shape = Retrieval_by_shape(test_imgs, my_class_label, "Heels")
     visualize_retrieval(shape, 5, title="Forma: Heels")
 
-    shape = Retrieval_by_shape(test_imgs, test_class_labels, "Dresses")
+    shape = Retrieval_by_shape(test_imgs, my_class_label, "Dresses")
     visualize_retrieval(shape, 5, title="Forma: Dresses")
     
 def test_Retrieval_combined():
 
-    combined = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Shirts", "Blue")
+    combined = Retrieval_combined(test_imgs, my_class_label, my_test_color_labels, "Shirts", "Blue")
     visualize_retrieval(combined, 5, title="Camisetas azules")
 
-    combined = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Sandals", "Red")
+    combined = Retrieval_combined(test_imgs, my_class_label, my_test_color_labels, "Sandals", "Red")
     visualize_retrieval(combined, 5, title="Sandalias rojas")
     
-    combined = Retrieval_combined(test_imgs, test_class_labels, test_color_labels, "Dresses", "White")
+    combined = Retrieval_combined(test_imgs, my_class_label, my_test_color_labels, "Dresses", "White")
     visualize_retrieval(combined, 5, title="Vestidos blancos")
 
 #                   #
@@ -142,10 +146,10 @@ if __name__ == '__main__':
     imgs, class_labels, color_labels, upper, lower, background = read_extended_dataset()
     cropped_images = crop_images(imgs, upper, lower)
     
-    my_test_color_labels = my_colors()
+    my_test_color_labels, my_class_label = my_colors()
     #test per a les Funcions  d'analisi qualitatiu
-    #test_Retrieval_by_color()
-    #test_Retrieval_by_shape()
-    #test_Retrieval_combined()
+    test_Retrieval_by_color()
+    test_Retrieval_by_shape()
+    test_Retrieval_combined()
     #Posible problema, que tarda casi 3s en pasar.
-    test_Kmean_statistics()
+    #test_Kmean_statistics()
