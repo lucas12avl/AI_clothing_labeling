@@ -41,7 +41,7 @@ class KNN:
         D = M*N
         test_data = test_data.reshape(P,D)
         
-        dist = cdist(test_data, self.train_data, 'euclidean')
+        dist = cdist(test_data, self.train_data, 'hamming')
         
         proxima = dist.argsort(axis = 1)[:, :k]
         
