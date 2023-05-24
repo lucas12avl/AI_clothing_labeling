@@ -20,6 +20,8 @@ class KMeans:
         self._init_options(options)  # DICT options
         self._init_centroids()
 
+        self.N = np.zeros(K, dtype=int)
+        self.centroideglob = np.mean(self.X, axis=0)
 
     #############################################################
     ##  THIS FUNCTION CAN BE MODIFIED FROM THIS POINT, if needed
@@ -186,10 +188,36 @@ class KMeans:
         
         return (WCD / N)
 
-        """           
-        returns the within class distance of the current clustering
-        """
+    def interClassDistance(self):
+        ICD=0.0
+        N=self.X.shape[0]
 
+        for i in range(self.K):
+            for j in range(i+1, self.K):
+                X = self.centroids[i]
+                Y = self.centroids[j]
+                distancia = distance(X.reshape(1, -1), Y.reshape(1, -1))
+                ICD = ICD + np.sum(np.square(distancia))
+
+        calcul = ICD / (self.K * (self.K - 1) / 2)
+        return (calcul)
+
+    def CoeficientFisher(self):
+        numerador = 0
+        denominador = 0
+
+        for i in range(self.K):
+            X = self.centroids[i]
+            calcul = np.sum(np.square(distance(X.reshape(1, -1), self.centroideglob.reshape(1, -1))))
+            numerador += self.N[i] * calcul
+
+            for j in range(self.K):
+                if j != i:
+                    Y = self.centroids[j]
+                    calcul2 = np.sum(np.square(distance(X.reshape(1, -1), Y.reshape(1, -1))))
+                    denominador += self.N[i] * self.N[j] * calcul2
+        calculfinal = numerador / denominador
+        return calculfinal
         #######################################################
         ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
         ##  AND CHANGE FOR YOUR OWN CODE
@@ -199,7 +227,7 @@ class KMeans:
     def find_bestK(self, max_K):
         ant_WCD = 0
         bestK = None
-        llindar = 20
+        llindar = 10
 
         for k in range(2, max_K):
             self.K = k
