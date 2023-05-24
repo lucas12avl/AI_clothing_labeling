@@ -96,7 +96,12 @@ def test_Kmean_statistics():
   WCD_r, i, temps = Kmean_statistics(ka, 3)
   print("\n WithinClassDistance:", WCD_r, "\n clusters:",i, "\n time:",temps)   
     
-#def test_get_shape_accuracy():
+def test_get_shape_accuracy(gt_labels):
+    total = len(my_class_label)
+    correct = np.sum(my_class_label == gt_labels)
+    result = correct / total * 100
+    
+    return result
     
 def Kmean_statistics(kmeans, kmax):
     i = []
@@ -118,11 +123,13 @@ def Kmean_statistics(kmeans, kmax):
     return WCD_r, i, temps
 
 
-def get_shape_accuracy(etiquetes, gt):
-    total = len(etiquetes)
-    et_corr = sum(etiquetes == gt) #con for va un poco más lento
-    percentatge = (et_corr / total)*100
+def get_shape_accuracy(gt):
+    total = len(my_class_label)
+    et_corr = np.count_nonzero(my_class_label == gt) #con for va un poco más lento
+    percentatge = (et_corr / total) * 100
     
+    print("Shape accuracy is: %s%%"% percentatge)
+
     return percentatge
 
 
@@ -148,8 +155,9 @@ if __name__ == '__main__':
     
     my_test_color_labels, my_class_label = my_colors()
     #test per a les Funcions  d'analisi qualitatiu
-    test_Retrieval_by_color()
-    test_Retrieval_by_shape()
-    test_Retrieval_combined()
+    #test_Retrieval_by_color()
+    #test_Retrieval_by_shape()
+    #test_Retrieval_combined()
     #Posible problema, que tarda casi 3s en pasar.
     #test_Kmean_statistics()
+    get_shape_accuracy(test_class_labels)
