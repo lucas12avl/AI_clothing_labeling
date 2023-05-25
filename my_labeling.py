@@ -1,7 +1,7 @@
 __authors__ = ['1636290, 1631153, 1636589']
 __group__ = ['DJ.10']
 
-from utils_data import read_dataset, read_extended_dataset, crop_images, visualize_retrieval
+from utils_data import read_dataset, read_extended_dataset, crop_images, visualize_retrieval, visualize_k_means
 import numpy as np #para usar numpy hay que poner np.<lo que queramos usar de la libreria>
 import Kmeans as km
 import KNN as knn
@@ -124,6 +124,16 @@ def Kmean_statistics(kmeans, kmax):
     
     return WCD_r, i, temps
 
+
+def test_best_K():
+    max_K = 10
+    for im in test_imgs[:10]:
+        obj = km.KMeans(im)
+        best_K = obj.find_bestK(max_K)
+        obj.K = best_K
+        visualize_k_means(obj, im.shape)
+        
+
 if __name__ == '__main__':
 
     # Load all the images and GT
@@ -141,7 +151,8 @@ if __name__ == '__main__':
     #test per a les Funcions  d'analisi qualitatiu
     #test_Retrieval_by_color()
     #test_Retrieval_by_shape()
-    test_Retrieval_combined()
+    #test_Retrieval_combined()
     #Posible problema, que tarda casi 3s en pasar.
     #test_Kmean_statistics()
-    get_shape_accuracy(test_class_labels)
+    #get_shape_accuracy(test_class_labels)
+    test_best_K()
