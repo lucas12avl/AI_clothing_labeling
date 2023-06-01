@@ -20,7 +20,7 @@ class KMeans:
         self._init_options(options)  # DICT options
         self._init_centroids()
         
-        self.N = np.zeros(K, dtype=int)
+        self.N = np.zeros(self.K, dtype=int)
         self.centroideglob = np.mean(self.X, axis=0)
     
     
@@ -211,20 +211,10 @@ class KMeans:
         calcul = ICD / (self.K * (self.K - 1) / 2)
         return (calcul)
     
+
     def CoeficientFisher(self):
-        numerador = 0
-        denominador = 0
-        for i in range(self.K):
-            X = self.centroids[i]
-            calcul = np.sum(np.square(distance(X.reshape(1, -1), self.centroideglob.reshape(1, -1))))
-            numerador += self.N[i] * calcul
-            for j in range(self.K):
-               if j != i:
-                   Y = self.centroids[j]
-                   calcul2 = np.sum(np.square(distance(X.reshape(1, -1), Y.reshape(1, -1))))
-                   denominador += self.N[i] * self.N[j] * calcul2
-        calculfinal = numerador / denominador
-        return calculfinal
+        return (self.withinClassDistance() / self.interClassDistance())
+
 
 
     def find_bestK(self, max_K):
