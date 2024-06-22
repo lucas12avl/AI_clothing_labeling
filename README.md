@@ -32,7 +32,7 @@ Due to the complexity of the task, we will simplify the process by:
 ## Usage
 Execute the `my_labeling.py` on your python IDE and run
 
-##How to add your own selections   
+## How to add your own selections   
 Go to  `test_Retrieval_combined`  function on `my_labeling.py` and add a new search like:
 
 *combined = Retrieval_combined(test_imgs, my_class_label, my_test_color_labels, "Type_of_cloth", "Color") 
@@ -41,9 +41,12 @@ visualize_retrieval(combined, int:number_of_pieces_to_show, title="Your_own_titl
 The *supported colors* are: Red, Orange, Brown, Yellow, Green, Blue, Purple, Pink, Black, Grey, White
 The *type of cloths supported* are:  Dresses, Flip Flops, Jeans, Sandals, Shirts, Shorts, Socks, Handbags
 
-Example:
+## Example:
 * combined = Retrieval_combined(test_imgs, my_class_label, my_test_color_labels, "Handbags", "Black")
   visualize_retrieval(combined, 8, title="Black handbags")*
+
+<img src="Black_handbags_labeling_example.png" alt="Demostración de funcionalidades" width="600"/>
+  
 
 ## Tests
 To test the KNN and Kmeans algorithims, execute `TestCases_kmeans.py` and `TestCases_knn.py`.
