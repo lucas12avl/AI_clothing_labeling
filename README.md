@@ -1,6 +1,7 @@
 # AI Clothing Labeling
 ![cloth labeling: example of use](./project%20images/labeling_example.gif)
 For this example in the file `my_labeling.py` we have added new cases such as showing 8 images of each category. We have also added to show the pink and black dresses
+As you can see in the gif, twe have an accuracy of 90.5%
 
 
 ## Introduction
