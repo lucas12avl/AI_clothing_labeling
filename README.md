@@ -45,7 +45,7 @@ The *type of cloths supported* are:  Dresses, Flip Flops, Jeans, Sandals, Shirts
 * combined = Retrieval_combined(test_imgs, my_class_label, my_test_color_labels, "Handbags", "Black")
   visualize_retrieval(combined, 8, title="Black handbags")*
 
-<img src="./project%20images/Black_handbags_labeling_example.png" alt="example of use with black handbags" width="600"/>
+<img src="./project%20images/Black_handbags_labeling_example.png" alt="example of use with black handbags" width="400"/>
   
 
 ## Tests
